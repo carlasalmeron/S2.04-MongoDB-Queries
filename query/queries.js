@@ -1,8 +1,8 @@
 // 1. Mostrar tots els documents en la col·lecció Restaurants.
-db.restaurants.find();
+db.restaurants.find({}, { _id: 0 });
 
 // 2. Mostrar el restaurant_id i name per tots els documents en la col·lecció Restaurants.
-db.restaurants.find({}, {restaurant_id: 1, name: 1, borough: 1, cuisine: 1 });
+db.restaurants.find({}, { restaurant_id: 1, name: 1, _id: 0 });
 
 // 3. Mostrar el restaurant_id, name, borough i cuisine.
 db.restaurants.find({}, { _id: 0, restaurant_id: 1, name: 1, borough: 1, cuisine: 1 });
@@ -11,28 +11,28 @@ db.restaurants.find({}, { _id: 0, restaurant_id: 1, name: 1, borough: 1, cuisine
 db.restaurants.find({}, { _id: 0, restaurant_id: 1, name: 1, borough: 1, "address.zipcode": 1 });
 
 // 5. Mostrar tots els restaurants que estan en el Bronx.
-db.restaurants.find({borough : "Bronx"},{});
+db.restaurants.find({ borough: "Bronx" }, { _id: 0 });
 
 // 6. Mostrar els primers 5 restaurants que estan en el Bronx.
-db.restaurants.find({borough : "Bronx"}).limit(5);
+db.restaurants.find({ borough: "Bronx" }, { _id: 0 }).limit(5);
 
 // 7. Mostrar el pròxims 5 restaurants després de saltar els primers 5 del Bronx.
-db.restaurants.find({borough : "Bronx"}).skip(5).limit(5);
+db.restaurants.find({ borough: "Bronx" }, { _id: 0 }).skip(5).limit(5);
 
 // 8. Trobar els restaurants amb un score de més de 90.
-db.restaurants.find({"grades.score" : {$gt :90}}, { name: 1, _id: 0});
+db.restaurants.find({ "grades.score": { $gt: 90 } }, { _id: 0 });
 
 // 9. Trobar els restaurants amb un score de més de 80 però menys que 100.
-db.restaurants.find({$and: [{"grades.score" : {$gt :80}},{"grades.score" : {$lt :100}}]}, {name: 1, _id: 0});
+db.restaurants.find({ "grades.score": { $gt: 80, $lt: 100 } }, { _id: 0 });
 
 // 10. Trobar els restaurants amb longitud menor que -95.754168.
 db.restaurants.find({"address.coord.1" : {$lt : -95.754168}}, {name: 1, _id: 0});
 
 // 11. Trobar restaurants que no preparen 'American', amb qualificació > 70 i longitud < -65.754168.
-db.restaurants.find({$and : [{"address.coord.0" : {$lt : -65.754168}},{"grades.score": {$gt : 70}},{ cuisine :{$ne :"American"}}]});
+db.restaurants.find({ cuisine: { $ne: "American" }, "grades.score": { $gt: 70 }, "location.coordinates.0": { $lt: -65.754168 } }, { _id: 0 });
 
 // 12. El mateix que l'anterior però sense usar operador $and.
-db.restaurants.find({"address.coord.0" : {$lt : -65.754168},"grades.score": {$gt : 70},cuisine :{$ne: "American"}},{name: 1, _id: 0});
+db.restaurants.find({ cuisine: { $ne: "American" }, "grades.score": { $gt: 70 }, "location.coordinates.0": { $lt: -65.754168 } }, { _id: 0 });
 
 // 13. Trobar restaurants que no són 'American', grau 'A', i no són de Brooklyn. Ordenats per cuisine descendent.
 db.restaurants.find({ cuisine: { $ne: "American" }, "grades.grade": "A", borough: { $ne: "Brooklyn" } }, { _id: 0 }).sort({ cuisine: -1 });
@@ -56,10 +56,10 @@ db.restaurants.find({$or:[{borough:"Staten Island"},{borough:"Queens"},{borough:
 db.restaurants.find({$nor:[{borough:"Staten Island"},{borough:"Queens"},{borough:"Bronx"},{borough:"Brooklyn"}]},{restaurant_id:1,name:1,borough:1,cuisine:1,_id:0});
 
 // 20. Trobar restaurant_id, name, borough i cuisine amb marcador no superior a 10.
-db.restaurants.find({ "grades.score" : { $lt: 10 }},{restaurant_id: 1, name: 1, borough: 1,  cuisine:1, _id: 0});
+db.restaurants.find({ "grades.score": { $lte: 10 } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1, _id: 0 });
 
 // 21. Trobar restaurants que preparen peix, no 'American' ni 'Chinees', o nom comença amb 'Wil'.
-db.restaurants.find({$or: [{ cuisine: { $nin: ["American", "Chinese"] } },{ name: /^Wil/ }]},{ restaurant_id: 1, name: 1, borough: 1, cuisine: 1, _id: 0 });
+db.restaurants.find({ $or: [{ cuisine: "Seafood" }, { cuisine: { $nin: ["American", "Chinese"] }, name: /^Wil/ }] }, { _id: 0 });
 
 // 22. Trobar restaurant_id, name, i grades per grau "A", score 11, i data "2014-08-11T00:00:00Z".
 db.restaurants.find({ grades: { $elemMatch: { grade: "A", score: 11, date: ISODate("2014-08-11T00:00:00.000Z") } } }, { restaurant_id: 1, name: 1, grades: 1, _id: 0 });
