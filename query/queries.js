@@ -59,7 +59,7 @@ db.restaurants.find({$nor:[{borough:"Staten Island"},{borough:"Queens"},{borough
 db.restaurants.find({ "grades.score": { $lte: 10 } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1, _id: 0 });
 
 // 21. Trobar restaurants que preparen peix, no 'American' ni 'Chinees', o nom comença amb 'Wil'.
-db.restaurantes.find({$or: [{$and: [{cuisine: "Seafood"}, {cuisine: {$nin: ["American", "Chinese"]}}]}, {name: /^Wil/}]})
+db.restaurantes.find({$or: [{$and: [{cuisine: "Seafood"}, {cuisine: {$nin: ["American", "Chinese"]}}]}, {name: /^Wil/}]});
 
 // 22. Trobar restaurant_id, name, i grades per grau "A", score 11, i data "2014-08-11T00:00:00Z".
 db.restaurants.find({ grades: { $elemMatch: { grade: "A", score: 11, date: ISODate("2014-08-11T00:00:00.000Z") } } }, { restaurant_id: 1, name: 1, grades: 1, _id: 0 });
@@ -80,7 +80,7 @@ db.restaurants.find({}, { _id: 0 }).sort({ name: -1 });
 db.restaurants.find({}, { _id: 0 }).sort({ cuisine: 1, borough: -1 });
 
 // 28. Mostrar direccions que no contenen el carrer.
-db.restaurantes.find({"address.street": {$exists: false}})
+db.restaurantes.find({"address.street": {$exists: false}});
 
 // 29. Seleccionar documents on el valor de `coordinate` és de tipus Double. Mostrar el name, restaurant_id i coordinades.
 db.restaurants.find({ "location.coordinates": { $type: "double" } }, { name: 1, restaurant_id: 1, "location.coordinates": 1, _id: 0 });
@@ -89,7 +89,7 @@ db.restaurants.find({ "location.coordinates": { $type: "double" } }, { name: 1, 
 db.restaurants.find({ "grades.score": { $mod: [7, 0] } }, { restaurant_id: 1, name: 1, "grades.grade": 1, _id: 0 });
 
 // 31. Trobar name, borough, longitud, latitud i cuisine per noms que contenen 'mon'.
-db.restaurantes.find({name: /world/i}, {name: 1, borough: 1, "location.coordinates": 1, cuisine: 1, _id: 0})
+db.restaurantes.find({name: /world/i}, {name: 1, borough: 1, "location.coordinates": 1, cuisine: 1, _id: 0});
 
 // 32. Mostrar restaurant_id, name i grade i score de més de 80 però menys que 100.
-db.restaurantes.find({"grades.score": {$gt: 80, $lt: 100}}, {restaurant_id: 1, name: 1, grades: 1, _id: 0})
+db.restaurantes.find({"grades.score": {$gt: 80, $lt: 100}}, {restaurant_id: 1, name: 1, grades: 1, _id: 0});
